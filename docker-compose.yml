@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  taskflow-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: taskflow_app
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=sqlite:///./tasks.db
+      - SECRET_KEY=f4f6bdf7764d8a1ce746de552ad170d1e57c6cb33d289ff15101a0bcce12b07e
+      - ALGORITHM=HS256
+      - ACCESS_TOKEN_EXPIRE_MINUTES=60
+    volumes:
+      - task-db-volume:/app/backend
+    restart: unless-stopped
+
+volumes:
+  task-db-volume:
