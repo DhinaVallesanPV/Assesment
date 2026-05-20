@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskFlow ⚡ Premium Task Management</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Premium Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Local Stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Background Glow Elements -->
+    <div class="glow-bg-1"></div>
+    <div class="glow-bg-2"></div>
+
+    <div class="app-container">
+        <!-- Toast Notification Area -->
+        <div id="toast-container" class="toast-container"></div>
+
+        <!-- Header -->
+        <header class="app-header">
+            <div class="logo">
+                <span class="logo-icon"><i class="fa-solid fa-bolt"></i></span>
+                <h1>TaskFlow</h1>
+            </div>
+            <div id="user-profile" class="user-profile hidden">
+                <span class="user-email"><i class="fa-regular fa-user"></i> <span id="display-email">user@example.com</span></span>
+                <button id="btn-logout" class="btn btn-secondary btn-sm"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</button>
+            </div>
+        </header>
+
+        <!-- Main Wrapper -->
+        <main class="app-main">
+            <!-- 1. Auth Section -->
+            <section id="auth-section" class="auth-section">
+                <div class="glass-card auth-card">
+                    <div class="auth-tabs">
+                        <button id="tab-login" class="auth-tab active">Sign In</button>
+                        <button id="tab-register" class="auth-tab">Sign Up</button>
+                    </div>
+
+                    <!-- Login Form -->
+                    <form id="login-form" class="auth-form">
+                        <div class="form-title">Welcome Back</div>
+                        <p class="form-subtitle">Enter your credentials to access your workspace</p>
+                        
+                        <div class="input-group">
+                            <label for="login-email"><i class="fa-regular fa-envelope"></i> Email Address</label>
+                            <input type="email" id="login-email" required placeholder="name@example.com" autocomplete="email">
+                        </div>
+                        <div class="input-group">
+                            <label for="login-password"><i class="fa-solid fa-lock"></i> Password</label>
+                            <input type="password" id="login-password" required placeholder="••••••••" autocomplete="current-password">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">
+                            <span>Sign In</span> <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </form>
+
+                    <!-- Register Form -->
+                    <form id="register-form" class="auth-form hidden">
+                        <div class="form-title">Create Account</div>
+                        <p class="form-subtitle">Join us today to organize your daily activities</p>
+                        
+                        <div class="input-group">
+                            <label for="register-email"><i class="fa-regular fa-envelope"></i> Email Address</label>
+                            <input type="email" id="register-email" required placeholder="name@example.com" autocomplete="email">
+                        </div>
+                        <div class="input-group">
+                            <label for="register-password"><i class="fa-solid fa-lock"></i> Password</label>
+                            <input type="password" id="register-password" required placeholder="Min. 6 characters" minlength="6" autocomplete="new-password">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">
+                            <span>Get Started</span> <i class="fa-solid fa-user-plus"></i>
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- 2. Dashboard Section (Authenticated) -->
+            <section id="dashboard-section" class="dashboard-section hidden">
+                <!-- Stats Overview Grid -->
+                <div class="stats-grid">
+                    <div class="glass-card stat-card">
+                        <div class="stat-icon purple"><i class="fa-solid fa-list-check"></i></div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="stat-total">0</div>
+                            <div class="stat-label">Total Tasks</div>
+                        </div>
+                    </div>
+                    <div class="glass-card stat-card">
+                        <div class="stat-icon green"><i class="fa-regular fa-circle-check"></i></div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="stat-completed">0</div>
+                            <div class="stat-label">Completed</div>
+                        </div>
+                    </div>
+                    <div class="glass-card stat-card">
+                        <div class="stat-icon orange"><i class="fa-regular fa-clock"></i></div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="stat-pending">0</div>
+                            <div class="stat-label">Pending</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <!-- Left Side: Task Creation -->
+                    <div class="dashboard-left">
+                        <div class="glass-card create-card">
+                            <h2><i class="fa-solid fa-plus-circle"></i> Create New Task</h2>
+                            <form id="create-task-form">
+                                <div class="input-group">
+                                    <label for="task-title">Task Title</label>
+                                    <input type="text" id="task-title" required placeholder="What needs to be done?" maxlength="100">
+                                </div>
+                                <div class="input-group">
+                                    <label for="task-desc">Description (Optional)</label>
+                                    <textarea id="task-desc" rows="3" placeholder="Add some notes about this task..."></textarea>
+                                </div>
+                                <div class="checkbox-group">
+                                    <input type="checkbox" id="task-completed">
+                                    <label for="task-completed">Mark as completed initially</label>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-block">
+                                    <i class="fa-solid fa-circle-plus"></i> Add Task
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Right Side: Task Listing -->
+                    <div class="dashboard-right">
+                        <div class="glass-card tasks-card">
+                            <div class="tasks-header">
+                                <h2><i class="fa-solid fa-list"></i> Your Workspace</h2>
+                                <!-- Search/Filter Controls -->
+                                <div class="filters-container">
+                                    <div class="filter-tabs">
+                                        <button class="filter-tab active" data-filter="all">All</button>
+                                        <button class="filter-tab" data-filter="completed">Completed</button>
+                                        <button class="filter-tab" data-filter="pending">Pending</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Task Items Container -->
+                            <div id="tasks-list" class="tasks-list">
+                                <!-- Dynamic tasks will go here -->
+                                <div class="empty-state">
+                                    <i class="fa-solid fa-circle-notch fa-spin"></i>
+                                    <p>Loading your tasks...</p>
+                                </div>
+                            </div>
+
+                            <!-- Pagination Controls -->
+                            <div class="pagination-container" id="pagination-controls">
+                                <button id="btn-prev" class="btn btn-secondary btn-sm" disabled>
+                                    <i class="fa-solid fa-chevron-left"></i> Previous
+                                </button>
+                                <span class="pagination-info" id="pagination-info">Page 1 of 1</span>
+                                <button id="btn-next" class="btn btn-secondary btn-sm" disabled>
+                                    Next <i class="fa-solid fa-chevron-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Local JavaScript -->
+    <script src="app.js"></script>
+</body>
+</html>
