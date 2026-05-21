@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: taskflow
+    env: docker
+    dockerfilePath: Dockerfile
+    # Render will automatically build the Dockerfile.
+    envVars:
+      - key: DATABASE_URL
+        value: sqlite:///./tasks.db
+      - key: SECRET_KEY
+        value: "<YOUR_SECRET_KEY>"
+      - key: ALGORITHM
+        value: HS256
+      - key: ACCESS_TOKEN_EXPIRE_MINUTES
+        value: "60"
