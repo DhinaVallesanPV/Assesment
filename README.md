@@ -1,22 +1,27 @@
 # ⚡ TaskFlow — Premium Task Management Application
 
-TaskFlow is a premium, high-performance Task Management Web Application. It consists of a robust **FastAPI (Python)** REST backend and a stunning, responsive **Glassmorphism Single Page Application (SPA)** frontend built with Vanilla HTML, CSS, and JavaScript.
+TaskFlow is a premium, high-performance Task Management Web Application built to fulfill the Python Developer Intern assessment. It consists of a robust **FastAPI (Python)** REST backend and a stunning, responsive **Glassmorphism Single Page Application (SPA)** frontend built with Vanilla HTML, CSS, and JavaScript.
 
-This application is built for high stability, utilizing secure JWT tokens, SQLite database integration, isolated environment variables, automated pagination, and completed state filtering.
+This application is engineered for maximum performance, clean code structure, absolute database separation, secure JWT authentication, and fluid, responsive UI animations.
 
 ---
 
-## 🎨 Premium Features
+## 🎨 Features & Functionalities
 
-- 🔐 **Secure Authentication**: Built-in User Registration, User Login, JWT token generation, and industry-standard password hashing using `bcrypt` and `passlib`.
-- 📋 **Workspace Tasks Management**: Full task life cycle support: create, view, update completion status, and permanently delete tasks.
-- 🛡️ **Strict Access Control**: Users can only access, view, modify, or delete their own data. Deep unit testing enforces cross-user privacy boundaries.
-- ⚙️ **Performance Controls**:
-  - **Dynamic Pagination**: Adjustable limits (`skip` and `limit` query parameters) implemented on the database query level to prevent loading overhead.
-  - **Status Filtering**: Instantly filter between `All`, `Completed`, or `Pending` items (`?completed=true|false` parameters).
-- 🚀 **Wow-Factor UI Design**: Beautiful, glowing dark-mode aesthetics using modern glassmorphic surfaces, Harmonious purple accent gradients, micro-animations on actions, profile summaries, and animated Toast feedback alerts.
-- 🐳 **Dockerization Ready**: Ready-to-go `Dockerfile` and `docker-compose.yml` for unified, pain-free deployment.
-- 🧪 **Self-Contained Testing**: Comprehensive pytest unit and integration test suite operating on an isolated, in-memory database engine (`StaticPool`).
+### 🧱 Robust FastAPI Backend
+- **🔐 Secure Authentication**: Includes registration (`POST /register`) and login (`POST /login`) endpoints using `bcrypt` password hashing (`passlib`) and signed **JWT access tokens** (`python-jose`).
+- **📋 Task CRUD Engine**: Authenticated users can create, read, update, and permanently delete their own tasks.
+- **🛡️ Strict Access Boundaries**: Database-level verification ensures users can only read or edit tasks owned by themselves (`403 Forbidden` verification).
+- **⚙️ Performance Controls**:
+  - **Dynamic Pagination**: Built-in `skip` and `limit` query parameters at the database layer to avoid high-volume loading overhead.
+  - **Completion State Filtering**: Fast status filtering using `?completed=true|false` parameters on requests.
+- **🧪 Comprehensive Pytest Suite**: Fully isolated integration tests operating on a temporary in-memory database engine (`StaticPool`) to guarantee no state leaks.
+
+### 🎨 WOW-Factor Frontend UI
+- **🔮 Modern Glassmorphic Design**: Clean, beautiful dark-mode styling utilizing glass backdrop filters, subtle neon glows, and professional Google Fonts (`Outfit` & `Inter`).
+- **⚡ Reactive SPA State**: Instant form transitions, automatic DOM refreshes, optimistic checkbox completion switches, and dynamic page-by-page rendering.
+- **🔔 Animated Toast Alerts**: Sleek, non-intrusive hover alerts for successes, warnings, and error responses.
+- **📱 Responsive Layout**: Fully optimized for mobile viewports, tablets, and wide monitors.
 
 ---
 
@@ -26,94 +31,92 @@ This application is built for high stability, utilizing secure JWT tokens, SQLit
 ├── backend/
 │   ├── app/
 │   │   ├── __init__.py
-│   │   ├── main.py         # App setup, CORS configuration & static mount
-│   │   ├── config.py       # Configuration loader from .env
-│   │   ├── database.py     # SQLAlchemy DB engine & SessionMaker
-│   │   ├── models.py       # SQLite relational mapping schemas (User, Task)
-│   │   ├── schemas.py      # Pydantic validation structures
-│   │   ├── auth.py         # JWT and password hashing middleware
+│   │   ├── main.py         # App config, CORS middlewares & static assets mounting
+│   │   ├── config.py       # Configuration settings loader from .env
+│   │   ├── database.py     # SQLAlchemy DB connection engine & SessionMaker
+│   │   ├── models.py       # SQLite database entities (User, Task)
+│   │   ├── schemas.py      # Pydantic validation schemas
+│   │   ├── auth.py         # JWT security functions & dependency injection
 │   │   ├── routers/
 │   │   │   ├── __init__.py
-│   │   │   ├── auth.py     # Sign up & Login routes
-│   │   │   └── tasks.py    # Task CRUD routes with pagination/filtering
+│   │   │   ├── auth.py     # Sign up & login route implementations
+│   │   │   └── tasks.py    # Paginated & filtered Task CRUD routes
 │   │   └── tests/
 │   │       ├── __init__.py
-│   │       └── test_main.py # Pytest integration test cases
-│   ├── requirements.txt    # Production packages
-│   └── .env.example        # Env configuration blueprint
+│   │       └── test_main.py # Comprehensive pytest test cases
+│   ├── requirements.txt    # Backend package dependencies
+│   └── .env.example        # Local configuration template
 ├── frontend/
 │   ├── index.html          # Core SPA Layout
-│   ├── styles.css          # Glassmorphic responsive styling
-│   └── app.js              # Token engine and async API calls
-├── .gitignore
-├── Dockerfile              # Multi-tier container build
-├── docker-compose.yml      # Orchestrated setup
-└── README.md               # Documentation
+│   ├── styles.css          # Glassmorphic custom stylesheet
+│   └── app.js              # Token management, active DOM rendering & API calls
+├── .gitignore              # Ignored local databases, envs, and cache folders
+├── Dockerfile              # Production-ready multi-tier docker configuration
+├── docker-compose.yml      # Orchestrated setup composition
+├── requirements.txt        # Root-level discoverable package requirements
+└── README.md               # Extensive project documentation
 ```
 
 ---
 
 ## 🛠️ Environment Variables (`.env`)
 
-Before running the application, make sure to define the environment variables. You can copy the template:
-
+Create a `.env` file under the `/backend` folder to configure local properties. You can copy the template directly:
 ```bash
 cp backend/.env.example backend/.env
 ```
 
-The application accepts the following variables:
+The application consumes the following environment variables:
 
-| Variable | Description | Default |
+| Key | Description | Default / Example |
 | :--- | :--- | :--- |
-| `DATABASE_URL` | SQLAlchemy connection string. | `sqlite:///./tasks.db` |
-| `SECRET_KEY` | Hexadecimal secret string used to sign JWT signatures. | *your-secret-key* |
-| `ALGORITHM` | Encryption algorithm for token signatures. | `HS256` |
-| `ACCESS_TOKEN_EXPIRE_MINUTES` | Lifecycle lifespan of a generated login session. | `60` |
+| `DATABASE_URL` | Connection URL for database engine | `sqlite:///./tasks.db` |
+| `SECRET_KEY` | Secure key for signing JWT signatures | *your-unique-hex-key* |
+| `ALGORITHM` | Encryption algorithm for token signatures | `HS256` |
+| `ACCESS_TOKEN_EXPIRE_MINUTES` | Lifecycle duration of login session tokens | `60` |
 
 ---
 
 ## 🚀 Running Locally
 
-Follow these quick steps to spin up the application in a few minutes:
-
-### Method 1: Python Virtual Environment (Standard)
-
-1. **Clone & Enter Repo**:
+### Method 1: Local Virtual Environment
+1. **Navigate to the Repository**:
    ```bash
    cd assessment
    ```
-
-2. **Setup Virtual Environment**:
+2. **Setup and Activate Environment**:
+   - **Windows (PowerShell)**:
+     ```bash
+     python -m venv .venv
+     .venv\Scripts\Activate.ps1
+     ```
+   - **Linux / MacOS**:
+     ```bash
+     python -m venv .venv
+     source .venv/bin/activate
+     ```
+3. **Install Dependencies**:
    ```bash
-   python -m venv .venv
+   pip install -r requirements.txt
    ```
-
-3. **Activate Environment**:
-   - **Windows (PowerShell)**: `.venv\Scripts\Activate.ps1`
-   - **Linux / MacOS**: `source .venv/bin/activate`
-
-4. **Install Dependencies**:
+4. **Start the Uvicorn Dev Server**:
    ```bash
-   pip install -r backend/requirements.txt
-   pip install "bcrypt==4.0.1"
-   ```
+   # Set PYTHONPATH to the root directory
+   # Windows:
+   $env:PYTHONPATH="."
+   # Linux / MacOS:
+   export PYTHONPATH="."
 
-5. **Set local .env file**:
-   Create a `.env` file under the `backend` folder as described in the blueprint.
-
-6. **Start Server**:
-   ```bash
-   $env:PYTHONPATH="."  # PowerShell syntax (On Linux: export PYTHONPATH=".")
    uvicorn backend.app.main:app --reload --port 8000
    ```
-   *The application will launch on **[http://localhost:8000](http://localhost:8000)**.*
-   *The fully interactive OpenAPI Docs will be available at **[http://localhost:8000/docs](http://localhost:8000/docs)**.*
+5. **Access the App**:
+   - Open **[http://localhost:8000](http://localhost:8000)** for the Glassmorphic UI.
+   - Open **[http://localhost:8000/docs](http://localhost:8000/docs)** to inspect the interactive OpenAPI/Swagger Documentation.
 
 ---
 
-### Method 2: Docker / Docker Compose (Fastest)
-
-1. **Launch container**:
+### Method 2: Docker Setup
+1. **Launch Service Container**:
    ```bash
    docker compose up --build -d
    ```
@@ -122,50 +125,40 @@ Follow these quick steps to spin up the application in a few minutes:
 
 ---
 
-## 🧪 Running Unit & Integration Tests
+## 🧪 Running Pytest Test Suite
 
-All tests are implemented using `pytest` and target a virtual, isolated in-memory SQLite engine to guarantee pristine test data environment.
+All integration and boundary safety tests are implemented using `pytest`. They execute on an isolated in-memory SQLite base (`StaticPool`) so your local development database remains untouched.
 
-1. Ensure your virtual environment is active.
-2. Set PYTHONPATH to root and run pytest:
-   ```bash
-   $env:PYTHONPATH="."
-   .venv\Scripts\pytest backend/app/tests/
-   ```
+Ensure your virtual environment is active, then run:
+```bash
+# Windows
+cmd.exe /c "set PYTHONPATH=.&& .venv\Scripts\pytest backend/app/tests/"
 
----
-
-## 📂 API Reference
-
-### Authentication Endpoints
-- `POST /register`: Accepts a JSON payload (`email`, `password`) to create a new user account. Returns `201 Created`.
-- `POST /login`: Accepts either JSON payload or Form data (`email/username`, `password`) and signs a secure JWT access token.
-
-### Tasks Endpoints (Requires `Authorization: Bearer <JWT_TOKEN>`)
-- `POST /tasks`: Create a new task.
-- `GET /tasks`: Retrieve user tasks list.
-  - Supports `skip` (defaults to `0`) and `limit` (defaults to `10`) for **database-level pagination**.
-  - Supports `completed` query parameter (`true` or `false`) for **completion filtering**.
-- `GET /tasks/{id}`: View details of a specific task.
-- `PUT /tasks/{id}`: Modify title, description, or toggle completion state of a task.
-- `DELETE /tasks/{id}`: Permanently delete a task from the user workspace.
+# Linux / MacOS
+PYTHONPATH=. pytest backend/app/tests/
+```
 
 ---
 
 ## 🌐 Live Deployment Guidelines
 
-### Serving Frontend directly via FastAPI (Unified Deployment)
-We have optimized the application so that **FastAPI serves the frontend folder directly** as static files at `/`.
-This makes single-service deployments (like **Render**, **Railway**, or **Fly.io**) incredibly straightforward:
-1. When deploying, configure the build command to install python requirements.
-2. Set the startup command to:
+### Option A: Render / Railway (Unified Deployment)
+Since FastAPI mounts and serves the static frontend folder directly from `/`, you can host the **entire app** under a single web service!
+1. Create a Web Service and connect your Git Repository.
+2. Choose **Python** as the runtime environment.
+3. Configure the build command:
+   ```bash
+   pip install -r requirements.txt
+   ```
+4. Set the start command:
    ```bash
    uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT
    ```
-3. Set your environment variables in the host dashboard.
-4. Your API endpoints, Swagger UI `/docs`, and Glassmorphic SPA Frontend will all run flawlessly on a single service!
+5. Add your `.env` variables under the environment/config variable dashboard.
 
----
-
-## 📄 License & Submissions
-This project is submitted under the Python Developer Intern assessment rules. Code organization, validation, database security, and responsive layouts have been fully implemented to professional standards.
+### Option B: Vercel (Serverless Deployments)
+To deploy the frontend assets separately to **Vercel** and connect them to a hosted backend:
+1. In Vercel, select the `/frontend` directory to import.
+2. Build command: (Leave blank / Standard Static).
+3. Output directory: `.`
+4. In your hosted backend, make sure to add your Vercel deployment URL to the CORS `origins` list in [main.py](file:///d:/tech/vscode/assesment'/backend/app/main.py#L23) so authentication requests pass without blockages.
